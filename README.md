@@ -1,4 +1,49 @@
- **Binary Tree**
+ **String**
+----
+
+### String generals:
+ ```
+import functools
+import string
+
+arr = [1, 3, 2, 1, 43, 23, 22]
+s = "1321432322"
+print("summation of list: ", functools.reduce(lambda a, b: a + b, arr))
+print("summation of string: ", functools.reduce(lambda a, b: a + string.digits.index(b), s, 0))
+print("max: ", functools.reduce(lambda a, b: a if a > b else b, arr))
+```
+
+### Convert String And Integer:
+ ```
+import functools
+import string
+
+
+def int_to_string(x):
+  is_negative = False
+  if x < 0:
+    is_negative = True
+
+  s = []
+  while True:
+    s.append(chr(ord('0') + x % 10))
+    x //= 10
+    if x == 0:
+      break
+
+  return ('-' if is_negative else '') + ''.join(reversed(s))
+
+
+def string_to_int(s):
+  return functools.reduce(
+    lambda running_sum, c: running_sum * 10 + string.digits.index(c), s[s[0] == '-':], 0) * (-1 if s[0] == '-' else 1)
+
+
+print(int_to_string(10) + int_to_string(43))
+print(string_to_int('10') + string_to_int('43'))
+```
+
+**Binary Tree**
 ----
 
 ### Binary Tree Structure:
