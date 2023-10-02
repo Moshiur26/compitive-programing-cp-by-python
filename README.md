@@ -43,6 +43,84 @@ print(int_to_string(10) + int_to_string(43))
 print(string_to_int('10') + string_to_int('43'))
 ```
 
+
+### Convert Base:
+ ```
+import string
+import functools
+
+
+def convert_base(num_as_string, base1, base2):
+  def construct_from_base(num_as_int, base):
+    return '' if num_as_int == 0 else construct_from_base(num_as_int // base, base) + string.hexdigits[
+      num_as_int % base].upper()
+
+  is_negative = num_as_string[0] == '-'
+  num_as_int = functools.reduce(
+    lambda x, c: x * base1 + string.hexdigits.index(c.lower()), num_as_string[is_negative:], 0
+  )
+  return ('-' if is_negative else '') + ('0' if num_as_int == 0 else construct_from_base(num_as_int, base2))
+
+
+print("Convert: 1323, b1: 10, b2: 2, result:", convert_base('1323', 10, 2))
+print("Convert: 10100101011, b1: 2, b2: 10, result:", convert_base('10100101011', 2, 10))
+```
+
+
+### Spreadsheet Column Decoding:
+ ```
+import functools
+
+
+def spreadsheet_col_decode(col):
+  return functools.reduce(
+    lambda value, c: value * 26 + ord(c) - ord('A') + 1, col, 0
+  )
+
+
+print("AZ: ", spreadsheet_col_decode('AZ'))
+print("ZZ: ", spreadsheet_col_decode('ZZ'))
+print("P: ", spreadsheet_col_decode('P'))
+print("ABZZK: ", spreadsheet_col_decode('ABZZK'))
+```
+
+
+### Remove 2 And Replace 7 By 8 And 9 From Array:
+solving this problem within O(n) time complexity
+ ```
+def remove_2_replace_7_by_8_and_9(size, arr):
+  number_of_7, write_index = 0, 0
+  for i in range(size):
+    if arr[i] != 2:
+      arr[write_index] = arr[i]
+      write_index += 1
+    if arr[i] == 7:
+      number_of_7 += 1
+
+  current_index = write_index - 1
+  replace_index = write_index + number_of_7 - 1
+  final_size = write_index + number_of_7
+
+  while current_index >= 0:
+    if arr[current_index] == 7:
+      arr[replace_index] = 9
+      arr[replace_index - 1] = 8
+      replace_index -= 2
+    # if not match with 7
+    else:
+      arr[replace_index] = arr[current_index]
+      replace_index -= 1
+    current_index -= 1
+  return arr[:final_size]
+
+
+print("[1, 2, 4, 7, 8, 2, 0, 7, 1] ->: ", remove_2_replace_7_by_8_and_9(9, [1, 2, 4, 7, 8, 2, 0, 7, 1]))
+print("[1, 2, 4, 2, 2, 7, 2, 2, 8, 2, 0, 7, 1] ->: ", remove_2_replace_7_by_8_and_9(13, [1, 2, 4, 2, 2, 7, 2, 2, 8, 2, 0, 7, 1]))
+```
+
+
+
+
 **Binary Tree**
 ----
 
