@@ -213,3 +213,152 @@ root.right.right.right = BinaryTreeNode(23)
 
 print('Tree Balanced Status: %d' % is_balanced_binary_tree(root))
 ```
+
+* ### LCA(Lowest Common Ancestor):
+Time complexity is O(n) And Space complexity is O(h). Here n is number of node and h is tree height.
+```
+import collections
+from binaryTreeNode import BinaryTreeNode
+
+
+def lca(tree, node0, node1):
+  Status = collections.namedtuple('Status', ('num_target_nodes', 'ancestor'))
+
+  def lca_helper(tree, node0, node1):
+    if not tree:
+      return Status(0, None)
+
+    left_result = lca_helper(tree.left, node0, node1)
+    if left_result.num_target_nodes == 2:
+      return left_result
+
+    right_result = lca_helper(tree.right, node0, node1)
+    if right_result.num_target_nodes == 2:
+      return right_result
+
+    num_target_nodes = left_result.num_target_nodes + right_result.num_target_nodes + int(tree is node0) + int(tree is node1)
+    return Status(num_target_nodes, tree if num_target_nodes == 2 else None)
+  return lca_helper(tree, node0, node1)
+
+
+root = BinaryTreeNode(8)
+root.left = BinaryTreeNode(4)
+root.right = BinaryTreeNode(5)
+
+root.left.left = BinaryTreeNode(344)
+root.left.right = BinaryTreeNode(42)
+root.right.left = BinaryTreeNode(32)
+root.right.right = BinaryTreeNode(53)
+
+root.left.left.left = BinaryTreeNode(344)
+root.left.left.right = BinaryTreeNode(344)
+# root.left.right.left = BinaryTreeNode(42)
+# root.left.right.right = BinaryTreeNode(24)
+root.right.left.left = BinaryTreeNode(32)
+root.right.left.right = BinaryTreeNode(43)
+root.right.right.left = BinaryTreeNode(53)
+root.right.right.right = BinaryTreeNode(23)
+
+result = lca(root, root.right.right.right, root.right.left.left)
+result = result.ancestor.data if result.ancestor else 'There is no ancestor'
+print('Tree Balanced Status: %d' % result)
+```
+
+
+* ### LCA(Lowest Common Ancestor) Reduce Space Complexity:
+This Solution is only applicable when node have parent pointer. Time complexity is O(n) And Space complexity is O(1). Here n is number of node in the tree.
+```
+def lca(node0, node1):
+  def get_depth(node):
+    depth = 0
+    while node:
+      depth += 1
+      node = node.parent
+    return depth
+
+  depth0, depth1 = get_depth(node0), get_depth(node1)
+
+  if depth1 > depth0:
+    node0, node1 = node1, node0
+
+  depth_diff = abs(depth0 - depth1)
+
+  while depth_diff:
+    node0 = node0.parent
+    depth_diff -= 1
+
+  while node0 is not node1:
+    node0 = node0.parent
+    node1 = node1.parent
+  return node0
+
+
+class BinaryTreeNode:
+  def __init__(self, data=None, parent=None, left=None, right=None):
+    self.data = data
+    self.parent = parent
+    self.left = left
+    self.right = right
+
+
+root = BinaryTreeNode(8)
+root.left = BinaryTreeNode(4, root)
+root.right = BinaryTreeNode(5, root)
+
+root.left.left = BinaryTreeNode(344, root.left)
+root.left.right = BinaryTreeNode(42, root.left)
+root.right.left = BinaryTreeNode(32, root.right)
+root.right.right = BinaryTreeNode(53, root.right)
+
+root.left.left.left = BinaryTreeNode(344, root.left.left)
+root.left.left.right = BinaryTreeNode(344, root.left, root.left.left)
+# root.left.right.left = BinaryTreeNode(42, root.left.right)
+# root.left.right.right = BinaryTreeNode(24, root.left.right)
+root.right.left.left = BinaryTreeNode(32, root.right.left)
+root.right.left.right = BinaryTreeNode(43, root.right.left)
+root.right.right.left = BinaryTreeNode(53, root.right.right)
+root.right.right.right = BinaryTreeNode(23, root.right.right)
+
+result = lca(root.right.right.right, root.right.left.left)
+print('Tree Balanced Status: %d' % result.data)
+```
+
+
+* ### Sum Root To Leaf:
+Time complexity is O(n) And Space complexity is O(h).
+```
+from binaryTreeNode import BinaryTreeNode
+
+
+def sum_root_to_leaf(tree, partial_sum=0):
+  if not tree:
+    return 0
+
+  partial_sum = partial_sum * 2 + tree.data
+
+  if not tree.left and not tree.right:
+    return partial_sum
+
+  return sum_root_to_leaf(tree.left, partial_sum) + sum_root_to_leaf(tree.right, partial_sum)
+
+
+root = BinaryTreeNode(1)
+root.left = BinaryTreeNode(0)
+root.right = BinaryTreeNode(1)
+
+root.left.left = BinaryTreeNode(1)
+root.left.right = BinaryTreeNode(1)
+root.right.left = BinaryTreeNode(0)
+root.right.right = BinaryTreeNode(1)
+
+root.left.left.left = BinaryTreeNode(1)
+root.left.left.right = BinaryTreeNode(0)
+root.left.right.left = BinaryTreeNode(0)
+root.left.right.right = BinaryTreeNode(1)
+root.right.left.left = BinaryTreeNode(0)
+root.right.left.right = BinaryTreeNode(1)
+root.right.right.left = BinaryTreeNode(1)
+root.right.right.right = BinaryTreeNode(0)
+
+print('Summation: %d' % sum_root_to_leaf(root))
+```
