@@ -362,3 +362,67 @@ root.right.right.right = BinaryTreeNode(0)
 
 print('Summation: %d' % sum_root_to_leaf(root))
 ```
+
+
+* ### Has Path Sum:
+Time complexity is O(n) And Space complexity is O(h).
+```
+from binaryTreeNode import BinaryTreeNode
+
+
+def has_path_sum(tree, remaining_sum):
+  if not tree:
+    return False
+
+  if not tree.left and not tree.right:
+    return tree.data == remaining_sum
+  return has_path_sum(tree.left, remaining_sum - tree.data) or has_path_sum(tree.right, remaining_sum - tree.data)
+
+
+root = BinaryTreeNode(8)
+root.left = BinaryTreeNode(4)
+root.right = BinaryTreeNode(5)
+
+root.left.left = BinaryTreeNode(344)
+root.left.right = BinaryTreeNode(42)
+root.right.left = BinaryTreeNode(32)
+root.right.right = BinaryTreeNode(53)
+
+print("8+5+53: %s" % str(has_path_sum(root, 8+5+53)))
+print("8+5+2: %s" % str(has_path_sum(root, 8+5+2)))
+```
+
+
+
+* ### Inorder Traversal Avoiding Recursion:
+Time complexity is O(n) And Space complexity is O(h).
+```
+from binaryTreeNode import BinaryTreeNode
+
+
+def inorder_traverse(tree):
+  s, result = [], []
+
+  while s or tree:
+    if tree:
+      s.append(tree)
+      tree = tree.left
+    else:
+      tree = s.pop()
+      result.append(tree.data)
+      tree = tree.right
+  return result
+
+
+root = BinaryTreeNode(8)
+root.left = BinaryTreeNode(4)
+root.right = BinaryTreeNode(5)
+
+root.left.left = BinaryTreeNode(344)
+root.left.right = BinaryTreeNode(42)
+root.right.left = BinaryTreeNode(32)
+root.right.right = BinaryTreeNode(53)
+
+print("Inorder Traverse: ", inorder_traverse(root))
+```
+
